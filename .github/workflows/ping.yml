@@ -1,0 +1,13 @@
+name: Ping URL
+
+on:
+  schedule:
+    - cron: "*/1 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send GET request to URL
+        run: curl -s -o /dev/null -w "%{http_code}" "https://live-checker.vercel.app/api/checker"
