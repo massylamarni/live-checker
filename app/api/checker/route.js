@@ -26,7 +26,7 @@ export async function GET(req) {
       });
     }
 
-    return NextResponse.json({ ok: true, response: data });
+    return NextResponse.json({ ok: true });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: 'Request failed' }, { status: 500 });
