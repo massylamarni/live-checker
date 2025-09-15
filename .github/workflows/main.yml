@@ -21,7 +21,7 @@ jobs:
           fi
 
       - name: Send email with Resend
-        if: steps.check.outputs.found == 'false'
+        if: steps.check.outputs.found == 'true'
         run: |
           curl -X POST "https://api.resend.com/emails" \
             -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
