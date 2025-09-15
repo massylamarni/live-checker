@@ -1,0 +1,27 @@
+name: Keyword Checker
+
+on:
+  workflow_dispatch: # run manually
+  schedule:
+    - cron: "*/15 * * * *" # every hour
+
+jobs:
+  check-keywords:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch target page
+        run: |
+          RESPONSE=$(curl -sL "https://linktr.ee/cop1besancon")
+          echo "Fetched response length: ${#RESPONSE}"
+
+          if [[ ${#RESPONSE} -lt 10 ]]; then
+            echo "Response too short"
+            exit 1
+          fi
+
+          if [[ "$RESPONSE" == *"13 septembre"* && "$RESPONSE" == *"13-septembre"* ]]; then
+            echo "✅ Keywords found"
+          else
+            echo "❌ Keywords missing"
+            exit 1
+          fi
