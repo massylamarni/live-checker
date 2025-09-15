@@ -7,7 +7,12 @@ export async function GET(req) {
   const KEYWORDS = ["13 septembre", "13-septembre"];
   
   const { searchParams } = new URL(req.url);
-  const isTest = searchParams.get('test') === 'true';
+  const isTest = searchParams.get('test', {
+    headers: {
+      'User-Agent': 'Mozilla/5.0',
+      'Accept': 'text/html'
+    }
+  }) === 'true';
   const testData = "Some text that does not contain any of the KEYWORDS";
 
   try {
