@@ -9,8 +9,8 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const isTest = searchParams.get('test', {
     headers: {
-      'User-Agent': 'Mozilla/5.0',
-      'Accept': 'text/html'
+      'User-Agent': 'Mozilla/5.0 (compatible; MyApp/1.0; +https://myapp.com)',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
     }
   }) === 'true';
   const testData = "Some text that does not contain any of the KEYWORDS";
