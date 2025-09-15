@@ -1,7 +1,7 @@
-name: Keyword Checker
+name: cop1-checker
 
 on:
-  workflow_dispatch: # run manually
+  workflow_dispatch:
   schedule:
     - cron: "*/15 * * * *" # every hour
 
@@ -10,18 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fetch target page
+        id: check
         run: |
           RESPONSE=$(curl -sL "https://linktr.ee/cop1besancon")
-          echo "Fetched response length: ${#RESPONSE}"
-
-          if [[ ${#RESPONSE} -lt 10 ]]; then
-            echo "Response too short"
-            exit 1
-          fi
 
           if [[ "$RESPONSE" == *"13 septembre"* && "$RESPONSE" == *"13-septembre"* ]]; then
-            echo "✅ Keywords found"
+            echo "found=true" >> $GITHUB_OUTPUT
           else
-            echo "❌ Keywords missing"
-            exit 1
+            echo "found=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Send email with Resend
+        if: steps.check.outputs.found == 'false'
+        run: |
+          curl -X POST "https://api.resend.com/emails" \
+            -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "from": "onboarding@resend.dev",
+              "to": ["massyl.amarni@outlook.fr"],
+              "subject": "COP1",
+              "text": "Updated !"
+            }'
