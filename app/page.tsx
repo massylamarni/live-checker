@@ -3,7 +3,7 @@
 export default function Home() {
 
   const handleClick = async (test = false) => {
-    const res = await fetch(`/api/checker${test && '?test=true'}`);
+    const res = await fetch(`/api/checker${test ? '?test=true' : ''}`);
     const data = await res.json();
   };
 
